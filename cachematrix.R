@@ -5,23 +5,24 @@
 
 makeCacheMatrix <- function(inputMatrix = matrix()) {
         
+        cachedMatrix <- NULL
         
-        
-        invertedMatrix <- NULL
+        #Reset cached inverse
         
         set <- function(y) {
                 inputMatrix <<- y
-                invertedMatrix <<- NULL
+                cachedMatrix <<- NULL
         }
-        
+                
         get <- function() inputMatrix
         
-        setInverted <- function(solve) invertedMatrix <<- solve
-        getInverted <- function() invertedMatrix
+        setSolved <- function(solve) cachedMatrix <<- solve
+        getSolved <- function() cachedMatrix
         
-        list(set = set, get = get,
-             setInverted = setInverted,
-             getInverted = getInverted)
+        list(set = set, 
+             get = get,
+             setSolved = setSolved,
+             getSolved = getSolved)
                 
 }
 
@@ -30,18 +31,25 @@ makeCacheMatrix <- function(inputMatrix = matrix()) {
 ## by the makeCacheMatricx function. If the inverse has already been calculated,
 ## and the matrix hasn't changed, cacheSolve retrieves the inverse.
 
-cacheSolve <- function(inputCached, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(inputMatrix, ...) {
         
-        invertedMatrix <- inputCached$getInverted()
-        if(!is.null(invertedMatrix)) {
-                message("Getting cached inverted matrix")
-                return(invertedMatrix)
+## Return a matrix that is the inverse of the special matrix cached by 
+## makeCachedMatrix function
+        
+        solved <- x$getSolved()
+        
+## Check for existing inverse matrix, return it if it exists
+        
+        if(!is.null(cachedMatrix)) {
+                message("Getting cached inverted matrix...")
+                return(cachedMatrix)
         }
         
-        targetMatrix <- inputCached$get()
-        invertedMatrix <- solve(targetMatrix)
-        inputCached$setInverted(invertedMatrix)
-        invertedMatrix
+        else {
+        targetMatrix <- inputMatrix$get()
+        solved <- solve(targetMatrix, ...)
+        inputMatrix$setInverted(solved)
+}        
+solved
         
 }
